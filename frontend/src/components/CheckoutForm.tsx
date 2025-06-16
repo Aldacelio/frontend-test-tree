@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useCreditPrice } from '@/hooks/useCreditPrice'
+import { useMask } from '@/hooks/useMask'
 import { processPayment, type PaymentData } from '@/services/paymentService'
 import { Loading } from '@/components/Loading'
 
@@ -18,13 +19,14 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
   const router = useRouter();
   const { loading, totalValue, formatCurrency, co2Quantity, creditPriceId } = useCreditPrice();
   const [isProcessing, setIsProcessing] = useState(false);
+  const { applyMask } = useMask();
 
   const [formData, setFormData] = useState({
     name: "Augusto de C R dos Anjos",
     email: isDesktop ? "augustodosantos@quimera.com.br" : "AugustoCRA@gmail.com",
     cardNumber: "1234 5678 9012 3456",
-    phone: "(51) 99000000",
-    cpf: "60055588842",
+    phone: "(51) 99000-0000",
+    cpf: "600.555.888-42",
     expiryMonth: "10",
     expiryYear: "29",
     cvc: "123",
@@ -45,8 +47,15 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
 
   const installmentOptions = generateInstallmentOptions();
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+  const handleInputChange = (field: string, value: string, mask?: string) => {
+    let processedValue = value;
+    
+    if (mask) {
+      const digitsOnly = value.replace(/\D/g, '');
+      processedValue = applyMask(digitsOnly, mask);
+    }
+    
+    setFormData(prev => ({ ...prev, [field]: processedValue }))
   }
 
   const isFormComplete = () => {
@@ -101,14 +110,14 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
   };
 
   const singleFields = [
-    { name: "name", label: "Nome", value: formData.name },
-    { name: "email", label: "E-mail", value: formData.email },
-    { name: "cardNumber", label: "Número de Cartão", value: formData.cardNumber }
+    { name: "name", label: "Nome", value: formData.name, placeholder: "Augusto de C R dos Anjos" },
+    { name: "email", label: "E-mail", value: formData.email, placeholder: isDesktop ? "augustodosantos@quimera.com.br" : "AugustoCRA@gmail.com" },
+    { name: "cardNumber", label: "Número de Cartão", value: formData.cardNumber, placeholder: "1234 5678 9012 3456", mask: "9999 9999 9999 9999" }
   ]
 
   const gridFields = [
-    { name: "phone", label: "Telefone", value: formData.phone },
-    { name: "cpf", label: "CPF", value: formData.cpf }
+    { name: "phone", label: "Telefone", value: formData.phone, placeholder: "(51) 99000-0000", mask: "(99) 99999-9999" },
+    { name: "cpf", label: "CPF", value: formData.cpf, placeholder: "600.555.888-42", mask: "999.999.999-99" }
   ]
 
   const getFieldId = (field: string) => isDesktop ? `${field}-desktop` : field
@@ -126,7 +135,8 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
             <Input
               id={getFieldId(field.name)}
               value={field.value}
-              onChange={(e) => handleInputChange(field.name, e.target.value)}
+              onChange={(e) => handleInputChange(field.name, e.target.value, field.mask)}
+              placeholder={field.placeholder}
               className="mt-1 bg-muted border-0 rounded-xl"
               disabled={isProcessing}
             />
@@ -142,7 +152,8 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
               <Input
                 id={getFieldId(field.name)}
                 value={field.value}
-                onChange={(e) => handleInputChange(field.name, e.target.value)}
+                onChange={(e) => handleInputChange(field.name, e.target.value, field.mask)}
+                placeholder={field.placeholder}
                 className="mt-1 bg-muted border-0 rounded-xl"
                 disabled={isProcessing}
               />
@@ -172,46 +183,56 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
               <>
                 <div className="w-16">
                   <Input 
-                    value={formData.expiryMonth} 
-                    onChange={(e) => handleInputChange('expiryMonth', e.target.value)}
+                    value={formData.expiryMonth}
+                    onChange={(e) => handleInputChange('expiryMonth', e.target.value, '99')}
+                    placeholder="10"
                     className="bg-muted border-0 rounded-xl"
                     disabled={isProcessing}
+                    maxLength={2}
                   />
                 </div>
                 <span className="text-primary text-2xl font-bold">/</span>
                 <div className="w-16">
                   <Input 
                     value={formData.expiryYear}
-                    onChange={(e) => handleInputChange('expiryYear', e.target.value)}
+                    onChange={(e) => handleInputChange('expiryYear', e.target.value, '99')}
+                    placeholder="29"
                     className="bg-muted border-0 rounded-xl"
                     disabled={isProcessing}
+                    maxLength={2}
                   />
                 </div>
               </>
             ) : (
               <div className="flex items-center gap-1">
                 <Input 
-                  value={formData.expiryMonth} 
-                  onChange={(e) => handleInputChange('expiryMonth', e.target.value)}
+                  value={formData.expiryMonth}
+                  onChange={(e) => handleInputChange('expiryMonth', e.target.value, '99')}
+                  placeholder="10"
                   className="bg-muted border-0 rounded-xl w-14"
                   disabled={isProcessing}
+                  maxLength={2}
                 />
                 <span className="text-primary text-2xl font-bold">/</span>
                 <Input 
-                  value={formData.expiryYear} 
-                  onChange={(e) => handleInputChange('expiryYear', e.target.value)}
+                  value={formData.expiryYear}
+                  onChange={(e) => handleInputChange('expiryYear', e.target.value, '99')}
+                  placeholder="29"
                   className="bg-muted border-0 rounded-xl w-14"
                   disabled={isProcessing}
+                  maxLength={2}
                 />
               </div>
             )}
 
             <div className={isDesktop ? 'w-52 ml-20' : 'flex-1'}>
               <Input 
-                value={formData.cvc} 
-                onChange={(e) => handleInputChange('cvc', e.target.value)}
+                value={formData.cvc}
+                onChange={(e) => handleInputChange('cvc', e.target.value, '999')}
+                placeholder="123"
                 className="bg-muted border-0 rounded-xl"
                 disabled={isProcessing}
+                maxLength={3}
               />
             </div>
           </div>
