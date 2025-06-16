@@ -57,7 +57,8 @@ module.exports = {
               'btn-primary': {
                   DEFAULT: 'hsl(var(--btn-primary-bg))',
                   hover: 'hsl(var(--btn-primary-hover))'
-              }
+              },
+              'input-bg': 'hsla(0, 0%, 96%, 1)'
   		}
   	}
   },

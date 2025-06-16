@@ -137,7 +137,7 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
               value={field.value}
               onChange={(e) => handleInputChange(field.name, e.target.value, field.mask)}
               placeholder={field.placeholder}
-              className="mt-1 bg-muted border-0 rounded-xl"
+              className="mt-1 bg-input-bg border-0 rounded-xl"
               disabled={isProcessing}
             />
           </div>
@@ -154,7 +154,7 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
                 value={field.value}
                 onChange={(e) => handleInputChange(field.name, e.target.value, field.mask)}
                 placeholder={field.placeholder}
-                className="mt-1 bg-muted border-0 rounded-xl"
+                className="mt-1 bg-input-bg border-0 rounded-xl"
                 disabled={isProcessing}
               />
             </div>
@@ -186,7 +186,7 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
                     value={formData.expiryMonth}
                     onChange={(e) => handleInputChange('expiryMonth', e.target.value, '99')}
                     placeholder="10"
-                    className="bg-muted border-0 rounded-xl"
+                    className="bg-input-bg border-0 rounded-xl"
                     disabled={isProcessing}
                     maxLength={2}
                   />
@@ -197,7 +197,7 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
                     value={formData.expiryYear}
                     onChange={(e) => handleInputChange('expiryYear', e.target.value, '99')}
                     placeholder="29"
-                    className="bg-muted border-0 rounded-xl"
+                    className="bg-input-bg border-0 rounded-xl"
                     disabled={isProcessing}
                     maxLength={2}
                   />
@@ -209,7 +209,7 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
                   value={formData.expiryMonth}
                   onChange={(e) => handleInputChange('expiryMonth', e.target.value, '99')}
                   placeholder="10"
-                  className="bg-muted border-0 rounded-xl w-14"
+                  className="bg-input-bg border-0 rounded-xl w-14"
                   disabled={isProcessing}
                   maxLength={2}
                 />
@@ -218,7 +218,7 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
                   value={formData.expiryYear}
                   onChange={(e) => handleInputChange('expiryYear', e.target.value, '99')}
                   placeholder="29"
-                  className="bg-muted border-0 rounded-xl w-14"
+                  className="bg-input-bg border-0 rounded-xl w-14"
                   disabled={isProcessing}
                   maxLength={2}
                 />
@@ -230,7 +230,7 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
                 value={formData.cvc}
                 onChange={(e) => handleInputChange('cvc', e.target.value, '999')}
                 placeholder="123"
-                className="bg-muted border-0 rounded-xl"
+                className="bg-input-bg border-0 rounded-xl"
                 disabled={isProcessing}
                 maxLength={3}
               />
@@ -279,7 +279,7 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
               type="button"
               onClick={handleProcessPayment}
               disabled={!isFormComplete() || isProcessing}
-              className={`px-6 py-3 rounded-sm min-w-[150px] ${isFormComplete() && !isProcessing ? 'bg-primary hover:bg-primary/90' : 'bg-btn-primary hover:bg-btn-primary-hover opacity-50 cursor-not-allowed'}`}
+              className={`px-6 py-3 rounded-sm min-w-[150px] ${isFormComplete() && !isProcessing ? 'bg-primary hover:bg-primary/90' : 'bg-btn-primary hover:bg-btn-primary-hover cursor-not-allowed'}`}
             >
               {isProcessing ? 'Processando...' : 'Prosseguir'}
             </Button>
@@ -298,7 +298,7 @@ export function CheckoutForm({ isDesktop = false }: Readonly<CheckoutFormProps>)
               type="button"
               onClick={handleProcessPayment}
               disabled={!isFormComplete() || isProcessing}
-              className={`w-full py-3 rounded-sm ${isFormComplete() && !isProcessing ? 'bg-primary hover:bg-primary/90' : 'bg-btn-primary hover:bg-btn-primary-hover opacity-50 cursor-not-allowed'}`}
+              className={`w-full py-3 rounded-sm ${isFormComplete() && !isProcessing ? 'bg-primary hover:bg-primary/90' : 'bg-btn-primary hover:bg-btn-primary-hover cursor-not-allowed'}`}
             >
               {isProcessing ? 'Processando...' : 'Prosseguir'}
             </Button>
